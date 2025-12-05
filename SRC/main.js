@@ -1,3 +1,4 @@
+import Invaders from "./classes/invader.js"
 import Player from "./classes/Player.js"
 import Projectile from "./classes/Projectile.js"
 
@@ -15,6 +16,8 @@ const player = new Player(canvas.width, canvas.height)
 const playerProjectile = []
 
 
+
+
 const keys = {
     left: false,
     right: false,
@@ -27,14 +30,24 @@ const keys = {
 const drawProjectiles = () => {
   playerProjectile .forEach(Projectile => {
     Projectile.draw(ctx)
+    Projectile.uptade()
   })
+}
+
+const clearProjectiles = () => {
+  playerProjectile.forEach((Projectile, index) => {
+      if(Projectile.position.y <= 0){
+        playerProjectile.splice(index, 1)
+      }
+  })
+
 }
 
 const gameLoop = () => {
 
    ctx.clearRect(0,0, canvas.width, canvas.height)
-
    drawProjectiles()
+   clearProjectiles()
 
    ctx.save()
 

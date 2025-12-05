@@ -58,11 +58,11 @@ class Player {
 
        shoot(Projectiles){
         const p = new Projectile({
-            x: this.position.x + this.width / 2,
-            y: this.position.y,
+            x: this.position.x + this.width / 2 - 1,
+            y: this.position.y + 2,
 
         },
-       -5
+       -10
     )
 
     Projectiles.push(p)
