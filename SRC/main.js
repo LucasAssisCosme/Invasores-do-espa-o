@@ -1,4 +1,5 @@
-import Invaders from "./classes/invader.js"
+import Grid from "./classes/Grid.js"
+import Invaders from "./classes/Invader.js"
 import Player from "./classes/Player.js"
 import Projectile from "./classes/Projectile.js"
 
@@ -13,6 +14,7 @@ canvas.height = innerHeight
 ctx.imageSmoothingEnabled = false
 
 const player = new Player(canvas.width, canvas.height)
+const grid = new Grid(3, 6) 
 const playerProjectile = []
 
 
@@ -48,6 +50,8 @@ const gameLoop = () => {
    ctx.clearRect(0,0, canvas.width, canvas.height)
    drawProjectiles()
    clearProjectiles()
+
+ grid.invaders.forEach(Invader => Invader.draw(ctx))
 
    ctx.save()
 
