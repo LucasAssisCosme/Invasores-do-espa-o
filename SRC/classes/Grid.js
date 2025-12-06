@@ -6,6 +6,10 @@ class Grid {
    constructor(rows, cols){
       this.rows = rows
       this.cols = cols
+
+     this.direction = "right"
+     this.moveDown = false
+
       this.invadersVelocity = 1
       this.invaders = this.Init()
    }
@@ -29,6 +33,33 @@ class Grid {
       }
       return array
       
+   }
+
+   draw(ctx){
+      this.invaders.forEach(Invader => Invader.draw(ctx))
+   }
+
+   uptade(){
+       if(chegouNaBordaDireita){
+          this.direction = "left"
+          this.moveDown = true
+       }
+       else if(chegouNaBordaEsquerda){
+         this.direction = "right"
+         this.moveDown = true
+       }
+
+      this.invaders.forEach((invader) => {
+
+         if(this.moveDown){
+            invader.moveDown()
+         }
+
+         if(this.direction === "right") invader.moveRight()
+         if(this.direction === "left") invader.moveLeft()
+      })
+
+      this.moveDown = false
    }
 }
 

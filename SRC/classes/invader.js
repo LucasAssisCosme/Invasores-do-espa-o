@@ -26,6 +26,10 @@ class Invaders {
           this.position.x += this.velocity
     }
 
+    moveDown(){
+        this.position.y += this.height
+    }
+
     draw(ctx) {
          ctx.drawImage(
             this.image,

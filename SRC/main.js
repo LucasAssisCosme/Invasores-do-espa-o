@@ -51,8 +51,8 @@ const gameLoop = () => {
    drawProjectiles()
    clearProjectiles()
 
- grid.invaders.forEach(Invader => Invader.draw(ctx))
-
+   grid.draw(ctx)
+   grid.uptade()
    ctx.save()
 
   ctx.translate(player.position.x + player.width/ 2, player.position.y + player.height / 2)
