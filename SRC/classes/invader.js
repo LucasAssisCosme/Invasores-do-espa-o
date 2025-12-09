@@ -58,9 +58,12 @@ class Invaders {
 
 
        hit(Projectile){
-           return {
-            
-           }
+           return (
+            Projectile.position.x >= this.position.x &&
+            Projectile.position.x <= this.position.x + this.width &&
+            Projectile.position.y >= this.position.y &&
+            Projectile.position.y <= this.position.y + this.height
+           )
        }
 
     

@@ -1,5 +1,6 @@
 import Grid from "./classes/Grid.js"
 import Invaders from "./classes/Invader.js"
+import Praticles from "./classes/Particle.js"
 import Player from "./classes/Player.js"
 import Projectile from "./classes/Projectile.js"
 
@@ -17,6 +18,7 @@ const player = new Player(canvas.width, canvas.height)
 const grid = new Grid(3, 6) 
 const playerProjectile = []
 const InvadersProjectile = []
+const praticles = []
 
 
 
@@ -41,6 +43,14 @@ const drawProjectiles = () => {
   
 }
 
+const drawParticles= () => {
+  praticles.forEach((Praticle) => {
+    Praticle.draw(ctx)
+    Praticle.uptade()
+  })
+}
+
+
 const clearProjectiles = () => {
   playerProjectile.forEach((Projectile, index) => {
       if(Projectile.position.y <= 0){
@@ -50,11 +60,50 @@ const clearProjectiles = () => {
 
 }
 
+const createExplosion = () => {
+  for (let i = 0; i < 10; i += 1) {
+    const Particle = new Praticles({
+      x: 100, 
+      y: 500,
+    },
+    {
+      x: Math.random() -0.5 * 1.5,
+      y: Math.random()  -0.5 * 1.5
+    },
+    20,
+    "crimson"
+    
+    
+  )
+    
+  praticles.push(Particle)
+  }
+}
+
+
+const checkShootInvaders = () => {
+  grid.invaders.forEach((invader, invaderIndex) => {
+    playerProjectile.some((Projectile, ProjectileIndex) => {
+      if (invader.hit(Projectile)) {
+
+         createExplosion()  
+
+           grid.invaders.splice(invaderIndex, 1)
+           playerProjectile.splice(ProjectileIndex, 1)
+      }
+    })
+  })
+}
+
+
+
 const gameLoop = () => {
 
    ctx.clearRect(0,0, canvas.width, canvas.height)
+    drawParticles()
    drawProjectiles()
    clearProjectiles()
+   checkShootInvaders()
 
    grid.draw(ctx)
    grid.uptade()
