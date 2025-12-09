@@ -40,11 +40,11 @@ class Grid {
    }
 
    uptade(){
-       if(chegouNaBordaDireita){
+       if(this.arrivedOnTheRightBorder()){
           this.direction = "left"
           this.moveDown = true
        }
-       else if(chegouNaBordaEsquerda){
+       else if(this.arrivedOnTheLeftBorder()){
          this.direction = "right"
          this.moveDown = true
        }
@@ -53,6 +53,8 @@ class Grid {
 
          if(this.moveDown){
             invader.moveDown()
+            invader.icrementeVelocity(0.1)
+            this.invadersVelocity = invader.velocity
          }
 
          if(this.direction === "right") invader.moveRight()
@@ -60,7 +62,28 @@ class Grid {
       })
 
       this.moveDown = false
-   }
+    }
+
+    arrivedOnTheRightBorder() {
+      return this.invaders.some(
+         (invader) => 
+             invader.position.x + invader.width >= innerWidth
+         
+      )
+    }
+
+    arrivedOnTheLeftBorder() {
+    return this.invaders.some(
+         (invader) => 
+             invader.position.x <= 0
+         
+      )
+    }
+
+    getRandomInvader(){
+      const index = Math.floor(Math.random() * this.invaders.length)
+      return this.invaders[index]
+    }
 }
 
 export default Grid

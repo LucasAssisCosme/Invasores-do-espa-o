@@ -29,6 +29,9 @@ class Invaders {
     moveDown(){
         this.position.y += this.height
     }
+   icrementeVelocity(boost){
+      this.velocity += boost
+   }
 
     draw(ctx) {
          ctx.drawImage(
@@ -44,13 +47,20 @@ class Invaders {
        shoot(Projectiles){
         const p = new Projectile({
             x: this.position.x + this.width / 2 - 1,
-            y: this.position.y + 2,
+            y: this.position.y + this.height,
 
         },
        10
     )
 
     Projectiles.push(p)
+       }
+
+
+       hit(Projectile){
+           return {
+            
+           }
        }
 
     

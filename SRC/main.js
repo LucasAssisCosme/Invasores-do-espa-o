@@ -16,6 +16,7 @@ ctx.imageSmoothingEnabled = false
 const player = new Player(canvas.width, canvas.height)
 const grid = new Grid(3, 6) 
 const playerProjectile = []
+const InvadersProjectile = []
 
 
 
@@ -30,10 +31,14 @@ const keys = {
 }
 
 const drawProjectiles = () => {
-  playerProjectile .forEach(Projectile => {
+  const Projectiles = [...playerProjectile, ...InvadersProjectile]
+
+
+  Projectiles.forEach(Projectile => {
     Projectile.draw(ctx)
     Projectile.uptade()
   })
+  
 }
 
 const clearProjectiles = () => {
@@ -100,6 +105,14 @@ addEventListener("keyup", (event) => {
       keys.shoot.relesead = true
     }
 })
+
+setInterval(() => {
+  const invader = grid.getRandomInvader()
+
+  if(invader){
+    invader.shoot(InvadersProjectile)
+  }
+}, 1000)
  
 gameLoop()
 
