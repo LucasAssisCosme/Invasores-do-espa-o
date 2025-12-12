@@ -5,3 +5,9 @@ export const PATH_INVADER_IMAGE = "SRC/assets/images/invader.png"
 
 export const INITIAL_FRAMES = 8
 
+export const gameState = {
+    START: "start",
+    PLAYING: "playing",
+    GAMEOVER: "gameover"
+}
+
