@@ -1,5 +1,6 @@
 import Grid from "./classes/Grid.js";
 import Invaders from "./classes/Invader.js";
+import Obstacle from "./classes/Obstacles.js";
 import Praticles from "./classes/Particle.js";
 import Player from "./classes/Player.js";
 import Projectile from "./classes/Projectile.js";
@@ -22,6 +23,22 @@ const grid = new Grid(3, 6);
 const playerProjectile = [];
 const InvadersProjectile = [];
 const praticles = [];
+const Obstacles = []
+
+const initObstacles = () => {
+  const x = canvas.width / 2 - 50
+  const y = canvas.height - 250
+  const offset = canvas.width * 0.15
+  const color = "crimson"
+
+  const obstacle1 = new Obstacle({x: x - offset, y}, 100, 20, color)
+  const obstacle2 = new Obstacle({x: x + offset, y}, 100, 20, color)
+
+  Obstacles.push(obstacle1)
+  Obstacles.push(obstacle2)
+}
+
+initObstacles()
 
 const keys = {
   left: false,
@@ -31,6 +48,10 @@ const keys = {
     relesead: true,
   },
 };
+
+const drawObstacles = () => {
+  Obstacles.forEach((Obstacle) => Obstacle.draw(ctx));
+}
 
 const drawProjectiles = () => {
   const Projectiles = [...playerProjectile, ...InvadersProjectile];
@@ -113,6 +134,24 @@ const checkShootPlayer = () => {
   });
 };
 
+const checkShootObstacles = () => {
+ Obstacles.forEach((obstacle) => {
+    playerProjectile.some((Projectile, i) => {
+    if (obstacle.hit(Projectile)) {
+      playerProjectile.splice(i, 1);
+       
+    }
+  });
+
+     InvadersProjectile.some((Projectile, i) => {
+    if (obstacle.hit(Projectile)) {
+      InvadersProjectile.splice(i, 1);
+       
+    }
+  });
+ })
+}
+
 const spawnGrid = () => { 
   if(grid.invaders.length === 0){
     grid.rows = Math.round(Math.random() * 9 + 1)
@@ -127,24 +166,24 @@ const  gameOver = () => {
           x: player.position.x + player.width / 2,
           y: player.position.y + player.height / 2,
         },
-        10,
-        "white"
+        20,
+        "#FF5C00"
       );
        createExplosion(
         {
           x: player.position.x + player.width / 2,
           y: player.position.y + player.height / 2,
         },
-        10,
-        "#4D98E6"
+        20,
+        "#FC1723"
       );
           createExplosion(
         {
           x: player.position.x + player.width / 2,
           y: player.position.y + player.height / 2,
         },
-        10,
-        "crimson"
+        20,
+        "#ffff0d"
       );
 
       currentState = gameState.GAMEOVER
@@ -159,12 +198,14 @@ const gameLoop = () => {
 
   drawProjectiles();
   drawParticles();
+  drawObstacles()
 
   clearProjectiles();
   clearParticles();
 
   checkShootInvaders();
- checkShootPlayer()
+  checkShootPlayer()
+  checkShootObstacles()
 
 
   grid.draw(ctx);
@@ -201,8 +242,10 @@ const gameLoop = () => {
   }
 
   if(currentState === gameState.GAMEOVER){ 
+    checkShootObstacles()
     drawParticles()
     drawProjectiles()
+    drawObstacles()
 
     clearProjectiles()
     clearParticles()
