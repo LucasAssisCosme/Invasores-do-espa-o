@@ -39,6 +39,11 @@ canvas {
    margin-top: auto;
 }
 
+.start-screen > div h1 {
+   margin-top: auto;
+   text-align: center;
+}
+
 .button-play,
 .button-restart{
     border: none;
@@ -79,6 +84,12 @@ canvas {
     justify-content: space-between;
     max-width: 600px;
     margin: 0 auto;
+}
+
+.comandos {
+    font-weight: 20px;
+    text-align: center;
+    margin-top: 40px;
 }
 
 @keyframes zoom {
