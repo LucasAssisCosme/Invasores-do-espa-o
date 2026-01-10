@@ -1,10 +1,22 @@
 import Grid from "./classes/Grid.js";
-import Invaders from "./classes/Invader.js";
 import Obstacle from "./classes/Obstacles.js";
 import Praticles from "./classes/Particle.js";
 import Player from "./classes/Player.js";
-import Projectile from "./classes/Projectile.js";
+import SoundEffects from "./classes/SoundEffects.js";
 import { gameState } from "./utils/constants.js";
+
+const soundEffects = new SoundEffects()
+
+const startScreen = document.querySelector(".start-screen");
+const gameOverScreen = document.querySelector(".game-over");
+const scoreUi = document.querySelector(".score-ui");
+const scoreElement = scoreUi.querySelector(".score > span");
+const levelElement = scoreUi.querySelector(".level > span");
+const highElement = scoreUi.querySelector(".high > span");
+const buttonPlay = document.querySelector(".button-play");
+const buttonRestart = document.querySelector(".button-restart");
+
+gameOverScreen.remove();
 
 // Ele procura no HTML o primeiro elemento <canvas> que existir na página e guarda esse elemento na variável canvas.
 const canvas = document.querySelector("canvas");
@@ -16,7 +28,19 @@ canvas.height = innerHeight;
 
 ctx.imageSmoothingEnabled = false;
 
-let currentState =  gameState.PLAYING
+let currentState =  gameState.START
+
+const gameData  = {
+  score: 0,
+  level: 1,
+  high: 0,
+}
+
+const showGameData = () => {
+  scoreElement.textContent = gameData.score
+  levelElement.textContent = gameData.level
+  highElement.textContent = gameData.high
+}
 
 const player = new Player(canvas.width, canvas.height);
 const grid = new Grid(3, 6);
@@ -48,6 +72,14 @@ const keys = {
     relesead: true,
   },
 };
+
+const incrementScore = (value) => {
+   gameData.score += value
+
+   if (gameData.score > gameData.high) {
+      gameData.high = gameData.score
+   }
+}
 
 const drawObstacles = () => {
   Obstacles.forEach((Obstacle) => Obstacle.draw(ctx));
@@ -108,6 +140,7 @@ const checkShootInvaders = () => {
   grid.invaders.forEach((invader, invaderIndex) => {
     playerProjectile.some((Projectile, ProjectileIndex) => {
       if (invader.hit(Projectile)) {
+        soundEffects.playHitSound()
         createExplosion(
           {
             x: invader.position.x + invader.width / 2,
@@ -116,6 +149,8 @@ const checkShootInvaders = () => {
           10,
           "#941CFF"
         );
+       
+        incrementScore(10)
 
         grid.invaders.splice(invaderIndex, 1);
         playerProjectile.splice(ProjectileIndex, 1);
@@ -127,6 +162,7 @@ const checkShootInvaders = () => {
 const checkShootPlayer = () => {
   InvadersProjectile.some((Projectile, i) => {
     if (player.hit(Projectile)) {
+      soundEffects.playExplosionSound()
       InvadersProjectile.splice(i, 1);
       gameOver()
        
@@ -154,9 +190,12 @@ const checkShootObstacles = () => {
 
 const spawnGrid = () => { 
   if(grid.invaders.length === 0){
+    soundEffects.playNextLevelSound()
     grid.rows = Math.round(Math.random() * 9 + 1)
     grid.cols = Math.round(Math.random() * 9 + 1)
     grid.restart()
+
+    gameData.level += 1
   }
 }
 
@@ -188,12 +227,14 @@ const  gameOver = () => {
 
       currentState = gameState.GAMEOVER
       Player.alive = false
+      document.body.append(gameOverScreen)
 }
 
 const gameLoop = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if(currentState === gameState.PLAYING){
+  showGameData()
   spawnGrid()
 
   drawProjectiles();
@@ -218,6 +259,7 @@ const gameLoop = () => {
   );
 
   if (keys.shoot.pressed && keys.shoot.relesead) {
+    soundEffects.playShootSound()
     player.shoot(playerProjectile);
     keys.shoot.relesead = false;
   }
@@ -275,12 +317,35 @@ addEventListener("keyup", (event) => {
   }
 });
 
-setInterval(() => {
+
+
+buttonPlay.addEventListener("click", () => {
+  startScreen.remove()
+  scoreUi.style.display = "block"
+  currentState = gameState.PLAYING
+
+
+ setInterval(() => {
   const invader = grid.getRandomInvader();
 
   if (invader) {
     invader.shoot(InvadersProjectile);
   }
 }, 1000);
+ })
+buttonRestart.addEventListener("click", () => {
+   currentState = gameState.PLAYING
+   player.alive = true
+
+   grid.invaders.length = 0
+   grid.invadersVelocity = 1
+
+   InvadersProjectile,length = 0
+
+   gameData.score = 0
+   gameData.level = 0
+
+   gameOverScreen.remove()
+ })
 
 gameLoop();
