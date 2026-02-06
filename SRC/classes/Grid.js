@@ -1,4 +1,4 @@
-import Invaders from "./Invader.js"
+import Invaders from "./invader.js"
 
 
 
@@ -55,7 +55,7 @@ class Grid {
 
          if(this.moveDown){
             invader.moveDown()
-            invader.icrementeVelocity(0.1)
+            invader.icrementeVelocity(1.5)
             this.invadersVelocity = invader.velocity
          }
 
@@ -92,6 +92,7 @@ class Grid {
       this.direction = "right"
 
     }
+    
 }
 
 export default Grid

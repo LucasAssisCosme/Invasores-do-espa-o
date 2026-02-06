@@ -1,6 +1,7 @@
 import { PATH_INVADER_IMAGE } from "../utils/constants.js";
 import Projectile from "./Projectile.js";
 
+
 class Invaders {
 
     constructor(position, velocity) {
@@ -65,6 +66,7 @@ class Invaders {
             Projectile.position.y <= this.position.y + this.height
            )
        }
+
 
     
 }

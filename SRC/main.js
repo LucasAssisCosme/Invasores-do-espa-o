@@ -1,4 +1,5 @@
 import Grid from "./classes/Grid.js";
+import Invaders from "./classes/invader.js";
 import Obstacle from "./classes/Obstacles.js";
 import Praticles from "./classes/Particle.js";
 import Player from "./classes/Player.js";
@@ -13,6 +14,7 @@ const scoreUi = document.querySelector(".score-ui");
 const scoreElement = scoreUi.querySelector(".score > span");
 const levelElement = scoreUi.querySelector(".level > span");
 const highElement = scoreUi.querySelector(".high > span");
+const coinElement = scoreUi.querySelector(".coin > span");
 const buttonPlay = document.querySelector(".button-play");
 const buttonRestart = document.querySelector(".button-restart");
 
@@ -34,6 +36,7 @@ const gameData  = {
   score: 0,
   level: 1,
   high: 0,
+  coin: 0,
 }
 
 const showGameData = () => {
@@ -196,8 +199,10 @@ const spawnGrid = () => {
     grid.restart()
 
     gameData.level += 1
+    gameData.coin += 5
   }
 }
+
 
 const  gameOver = () => { 
         createExplosion(
